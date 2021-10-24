@@ -1,0 +1,15 @@
+[Unit]
+Description=SMA Wechselrichter service
+After=openhab.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=1
+User=haus
+Group=daemon
+ExecStart=/opt/openhab/scripte/sma/startd.sh
+WorkingDirectory=/opt/openhab/scripte/sma
+
+[Install]
+WantedBy=multi-user.target

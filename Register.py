@@ -1,98 +1,235 @@
-from datetime import datetime
+from datetime import datetime, time, timedelta
+from time import gmtime, localtime, strftime
 
 from pymodbus.constants import Endian
+from pymodbus.exceptions import NotImplementedException
 from pymodbus.payload import BinaryPayloadDecoder
-
-
-class Value:
-    def __init__(self, value):
-        self.date = datetime.timestamp(datetime.now())
-        self.value = value
+from format_unit import formatWithPrefix
 
 
 class Register:
-    def __init__(self, id, name, description, length):
+    def __init__(self, id, name, description, length, format=None, unit=None):
         self.id = id
         self.name = name
         self.description = description
         self.length = length
-        self.value = None
-        self.registers = []
-
+        self.value = None        
+        self.format = format
+        self.unit = unit 
+        self.scalefactor, self.formatprecision = Register.getScale(format)
+        self.noprefix = format in Register.NO_PREFIX_FORMATTING
+        self._oh_name = None
+        
     def __str__(self):
-        return f"{self.id} {self.name} ({self.description})"
+        return f"{self.id} {self.name} ({self.description}) {self.get_formattedValue()}"
 
     def set_registers(self, registers):
-        self.registers = registers
+        # Decode the registers and store it to value
+        # If Value is Numeric in Subclass use scalefactor
+        raise NotImplementedException()
 
-    def is_null(self):
-        return None
-
+    def get_formattedValue(self):
+        if self.noprefix:
+            return 'No Value' if self.value is None else f"{self.value} {self.unit}"
+        elif self.format == "Dauer":
+            return 'No Duration' if self.value is None else str(timedelta(seconds=self.value))
+        elif self.format == "DT":
+            return 'No Time' if self.value is None else strftime("%a, %d %b %Y %H:%M:%S", localtime(self.value))
+        else:
+            return 'No Value' if self.value is None else formatWithPrefix(self.value, self.formatprecision, self.unit)
+        
     def get_value(self):
-        return None
+        return self.value 
 
+    def get_openhab_item(self):
+        # Helper: Output Openhab item definitions ... ensure by yourself, that the name is unique!
+        
+        # output some special formats as string
+        if self.format in Register.OUT_OPENHAB_AS_STRING:
+            return f'String {self.get_openhab_name()} "{self.description} [%s]" <none> (SMA)'
+        
+        return f'Number {self.get_openhab_name()} "{self.description} [%.{self.formatprecision}f {self.unit}]" <none> (SMA)'
+
+    def get_openhab_name(self):
+        if not self._oh_name:
+           self._oh_name = f'SMA_{self.name.replace(".","_")}' 
+        return self._oh_name
+
+    def get_openhab_value(self):        
+        if self.format in Register.OUT_OPENHAB_AS_STRING:
+            return self.get_formattedValue()
+        
+        if self.value is None and self.unit in Register.OUT_OPENHAB_NONE_AS_0:
+            return 0
+        
+        return self.value
+
+    """
+    Produktübersicht SMA Solar Technology AG
+    Technische Information SMA-Modbus-general-TI-de-10 14
+
+    Format Erklärung
+    Dauer Zeit in Sekunden, in Minuten oder in Stunden, je nach Modbus-Register (Ganzzahl)
+
+    ENUM,TAGLIST Codierte Zahlenwerte. Die Aufschlüsselung der möglichen Codes fin-
+    den Sie jeweils direkt unter der Bezeichnung des Modbus-Registers
+    in den Zuordnungstabellen. Siehe modbuslist_de.html (Ganzzahl)
+
+    FIX0 Dezimalzahl, kaufmännisch gerundet, ohne Nachkommastelle
+    FIX1 Dezimalzahl, kaufmännisch gerundet, 1 Nachkommastelle
+    FIX2 Dezimalzahl, kaufmännisch gerundet, 2 Nachkommastellen
+    FIX3 Dezimalzahl, kaufmännisch gerundet, 3 Nachkommastellen
+    FIX4 Dezimalzahl, kaufmännisch gerundet, 4 Nachkommastellen
+
+    FUNKTION_SEC Das im Modbus-Register gespeicherte Datum wird bei Änderung an
+    eine Funktion übergeben und startet diese. Nach Ausführen der
+    Funktion ist kein Statuswert mehr gesetzt. Vor Ausführen der Funktion
+    sollte in der Client-Software eine Sicherheitsabfrage vorgesehen
+    werden.
+
+    FW Firmware-Version (Ganzzahl)
+
+    HW Hardware-Version z. B. 24 (Ganzzahl)
+
+    IP4 4-Byte-IP-Adresse (IPv4) der Form XXX.XXX.XXX.XXX (Nicht implemetiert nur als (Ganzzahl))
+
+    RAW Text oder Zahl. Eine RAW-Zahl hat keine Nachkommastellen und
+    keine Tausender- oder sonstigen Trennzeichen. (Ganzzahl)
+
+    REV Revisionsnummer der Form 2.3.4.5 (Ganzzahl)
+
+    TEMP Temperaturwerte werden in speziellen Modbus-Registern in Grad
+    Celsius (°C), in Grad Fahrenheit (°F) oder in Kelvin (K) gespeichert.
+    Die Werte sind kaufmännisch gerundet, mit einer Nachkommastelle. (FIX1)
+
+    TM UTC-Zeit, in Sekunden (Ganzzahl)
+
+    UTF8 Daten im Format UTF8
+
+    DT Datum/Uhrzeit, gemäß der Ländereinstellung (Übertragung in Se-
+    kunden seit 01.01.1970) (Ganzzahl)
+    """
+    FORMATS = {
+        "FIX1": [0.1, 1],
+        "FIX2": [0.01, 2],
+        "FIX3": [0.001, 3],
+        "FIX4": [0.0001, 4],
+        "TEMP": [0.1, 1]
+    }
+
+    NO_PREFIX_FORMATTING = {"UTF8", "TM", "REV", "RAW", "IP4", "HW", "FW"}
+
+    OUT_OPENHAB_AS_STRING = {"UTF8", "TM", "TAGLIST", "Dauer", "DT"}
+
+    OUT_OPENHAB_NONE_AS_0 = {"W","A","VAr","VA"}
+
+    @staticmethod
+    def getScale(format):
+        if format is None:
+            return [1,0]
+        f = Register.FORMATS.get(format,[1,0])
+        return f
+
+    SMA_TAGLIST ={} # must assigned on startup! see sma.py for example    
+    
+
+
+def hex_to_signed(source):
+    """Convert a string hex value to a signed hexidecimal value.
+
+    This assumes that source is the proper length, and the sign bit
+    is the first bit in the first byte of the correct length.
+
+    hex_to_signed("F") should return -1.
+    hex_to_signed("0F") should return 15.
+    """
+    if not isinstance(source, str):
+        raise ValueError("string type required")
+    if 0 == len(source):
+        raise ValueError("string is empty")
+    sign_bit_mask = 1 << (len(source)*4-1)
+    other_bits_mask = sign_bit_mask - 1
+    value = int(source, 16)
+    return -(value & sign_bit_mask) | (value & other_bits_mask)
+
+S16_NAN = hex_to_signed("8000")
 
 class S16(Register):
-    def __init__(self, register_id, name, description, length=1):
-        Register.__init__(self, register_id, name, description, length)
+    def __init__(self, register_id, name, description, format=None, unit=''):
+        Register.__init__(self, register_id, name, description, 1, format, unit)
 
-    def get_value(self):
-        return BinaryPayloadDecoder.fromRegisters(self.registers, byteorder=Endian.Big).decode_16bit_int()
+    def set_registers(self, registers):    
+        v = BinaryPayloadDecoder.fromRegisters(registers, byteorder=Endian.Big).decode_16bit_int()         
+        # direct compare to 0x8000 doesn't work because 0x8000 is two's complement!!! 
+        # v==0x8000 is c/c++ style! This will only work in python for unsigned ints
+        self.value = None if v == S16_NAN else v * self.scalefactor
 
-    def is_null(self):
-        return self.get_value() == 0x8000
-
+S32_NAN = hex_to_signed("80000000")
 
 class S32(Register):
-    def __init__(self, register_id, name, description, length=2):
-        Register.__init__(self, register_id, name, description, length)
+    def __init__(self, register_id, name, description, format=None, unit=''):
+        Register.__init__(self, register_id, name, description, 2, format, unit)
 
-    def get_value(self):
-        return BinaryPayloadDecoder.fromRegisters(self.registers, byteorder=Endian.Big).decode_32bit_int()
-
-    def is_null(self):
-        return self.get_value() == 0x80000000
+    def set_registers(self, registers):
+        v =  BinaryPayloadDecoder.fromRegisters(registers, byteorder=Endian.Big).decode_32bit_int()
+        self.value = None if v == S32_NAN  else v * self.scalefactor
 
 
 class U16(Register):
-    def __init__(self, register_id, name, description, length=1):
-        Register.__init__(self, register_id, name, description, length)
+    def __init__(self, register_id, name, description, format=None, unit=''):
+        Register.__init__(self, register_id, name, description, 1, format, unit)
 
-    def get_value(self):
-        return BinaryPayloadDecoder.fromRegisters(self.registers, byteorder=Endian.Big).decode_16bit_uint()
-
-    def is_null(self):
-        return self.get_value() == 0xFFFF
+    def set_registers(self, registers):
+        v = BinaryPayloadDecoder.fromRegisters(registers, byteorder=Endian.Big).decode_16bit_uint()
+        self.value = None if v == 0xFFFF else v * self.scalefactor
 
 
 class U32(Register):
-    def __init__(self, register_id, name, description, length=2):
-        Register.__init__(self, register_id, name, description, length)
+    def __init__(self, register_id, name, description, format=None, unit=''):
+        Register.__init__(self, register_id, name, description, 2, format, unit)
 
-    def get_value(self):
-        return BinaryPayloadDecoder.fromRegisters(self.registers, byteorder=Endian.Big).decode_32bit_uint()
+    def set_registers(self, registers):
+        v = BinaryPayloadDecoder.fromRegisters(registers, byteorder=Endian.Big).decode_32bit_uint()
+        self.value = None if v == 0xFFFFFFFF or v == 0xFFFFFD else v * self.scalefactor
+        
+        if self.value and self.format == "TAGLIST":
+            self.raw_value = self.value
+            self.value = Register.SMA_TAGLIST.get(self.value, f"Unknown Value {self.value}")
 
-    def is_null(self):
-        return self.get_value() == 0xFFFFFFFF or self.get_value() == 0xFFFFFD
+    def get_formattedValue(self):
+        if self.value and self.format == "TAGLIST": 
+            return self.value
+        else:
+            return super().get_formattedValue()
+           
 
 
 class U64(Register):
-    def __init__(self, register_id, name, description, length=4):
-        Register.__init__(self, register_id, name, description, length)
+    def __init__(self, register_id, name, description, format=None, unit=''):
+        Register.__init__(self, register_id, name, description, 4, format, unit)
 
-    def get_value(self):
-        return BinaryPayloadDecoder.fromRegisters(self.registers, byteorder=Endian.Big).decode_64bit_uint()
-
-    def is_null(self):
-        return self.get_value() == 0xFFFFFFFFFFFFFFFF
+    def set_registers(self, registers):
+        v = BinaryPayloadDecoder.fromRegisters(registers, byteorder=Endian.Big).decode_64bit_uint()
+        self.value = None if v == 0xFFFFFFFFFFFFFFFF else v  * self.scalefactor
 
 
 class STR32(Register):
-    def __init__(self, register_id, name, description, length=8):
-        Register.__init__(self, register_id, name, description, length)
+    # STR32 Registers have variable length see modbuslist_de.html
+    # Format is ignored ... it is always utf-8; unit is also ignored
+    def __init__(self, register_id, name, description, length=16):
+        if length < 1:
+            raise "STR32 Register must have length > 0"
+        Register.__init__(self, register_id, name, description, length, "UTF8", "")
 
-    def get_value(self):
-        return BinaryPayloadDecoder.fromRegisters(self.registers, byteorder=Endian.Big).decode_string()
+    def set_registers(self, registers):
+        # size is in bytes! one modbus register is 2 bytes wide
+        s = BinaryPayloadDecoder.fromRegisters(registers, byteorder=Endian.Big).decode_string(self.length * 2)
+        # convert to string and remove trailing Null-Chars
+        s = s.rstrip(b'\00').decode('utf-8','ignore').strip()
 
-    def is_null(self):
-        return self.get_value() == ""
+        self.value = None if s=="" else s
+
+    def get_formattedValue(self):
+        return self.value
+
+

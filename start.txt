@@ -1,0 +1,11 @@
+python main.py -i10 -a"192.168.0.48" -p502 -u3 30775 40631 40497 40513 31017 30769 30835 40013 40109 30803 40029 -d
+
+python main.py -a"192.168.0.48" -all
+
+python main.py -a"192.168.0.48"  -f"registers.txt" -ohitems
+
+python main.py -a"192.168.0.48"  -f"registers.txt" -o"192.168.0.200"
+
+python main.py -a"192.168.0.48"  -f"registers.txt" -o"192.168.0.200" --ohlogport 8080
+
+python3 main.py -a"192.168.0.48"  -f"registers.txt" -o"localhost" -d
