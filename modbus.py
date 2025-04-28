@@ -1,10 +1,9 @@
-
-from typing import Dict, Set
-from pymodbus.client.sync import ModbusTcpClient
+from pymodbus.client import ModbusTcpClient
 import time
 
+
 from Register import Register
-from logger import ResultLogger, KeyValueLogger, TableLogger
+from logger import ResultLogger, TableLogger
 
 
 class Modbus:
@@ -41,8 +40,10 @@ class Modbus:
         if self.daemon:
             while True:                         
                 try:
+                    # no threads! this will be more robust with systemd
                     self._poll()
                 except BaseException as err:
+                	# let handle systemd the restart and error-logging for you ... see sma.service-file
                     print(f"Unexpected {err}, {type(err)}")
                 
                 time.sleep(self.interval)
@@ -63,9 +64,9 @@ class Modbus:
                 length = sum(reg.length for reg in group)
                 
                 response = client.read_holding_registers(
-                    start_id,
-                    length,
-                    unit=self.unit
+                    address=start_id,
+                    count=length,
+                    slave=self.unit
                 )
                 
                 if not response:

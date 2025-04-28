@@ -1,5 +1,5 @@
 """
-sends data to Openhab or any other server via a REST webservice
+sends data to Openhab 1.x or any other server via a REST webservice
 """
 import http.client
 from typing import List

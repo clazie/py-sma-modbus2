@@ -1,10 +1,19 @@
-from datetime import datetime, time, timedelta
-from time import gmtime, localtime, strftime
+from datetime import timedelta
+from time import localtime, strftime
 
-from pymodbus.constants import Endian
 from pymodbus.exceptions import NotImplementedException
-from pymodbus.payload import BinaryPayloadDecoder
+from pymodbus.client import ModbusBaseClient
 from format_unit import formatWithPrefix
+
+
+def _JsonPoint(measurement = "series_name", fields={}, tags={}):
+    # create a json point for write to influxDB
+    return [{
+                "measurement": measurement,
+                "fields": fields,
+                "tags": tags,
+                #"time": time
+            }]
 
 
 class Register:
@@ -19,6 +28,7 @@ class Register:
         self.scalefactor, self.formatprecision = Register.getScale(format)
         self.noprefix = format in Register.NO_PREFIX_FORMATTING
         self._oh_name = None
+        self._influx_tag = None
         
     def __str__(self):
         return f"{self.id} {self.name} ({self.description}) {self.get_formattedValue()}"
@@ -63,6 +73,25 @@ class Register:
             return 0
         
         return self.value
+
+    def get_JSON(self, measurement, tags ={}):
+        # format Data to JSON, used to write Data to influxDB 
+        # append the Names and unit to TAGs   
+        # build the Tag-List by splitting the name by '.'
+        if not self._influx_tag:
+            parts = self.name.split('.')
+            self._influx_tag = {
+                    'group':parts[0],
+                    'function':'.'.join(parts[1:]),
+                    'unit': self.unit
+                    }
+
+        if self.format in Register.OUT_INFLUX_AS_STRING:
+            return [] + _JsonPoint(measurement + "_status", {"value": self.get_formattedValue()},tags | self._influx_tag)
+        elif self.value is None:
+            return []
+        else:
+            return [] + _JsonPoint(measurement, {"value": float(self.value)},tags | self._influx_tag) 
 
     """
     Produktübersicht SMA Solar Technology AG
@@ -119,7 +148,9 @@ class Register:
 
     NO_PREFIX_FORMATTING = {"UTF8", "TM", "REV", "RAW", "IP4", "HW", "FW"}
 
-    OUT_OPENHAB_AS_STRING = {"UTF8", "TM", "TAGLIST", "Dauer", "DT"}
+    OUT_OPENHAB_AS_STRING = {"UTF8", "TM", "TAGLIST", "Dauer", "DT"} 
+
+    OUT_INFLUX_AS_STRING = {"UTF8", "TM", "TAGLIST", "DT"}
 
     OUT_OPENHAB_NONE_AS_0 = {"W","A","VAr","VA"}
 
@@ -159,7 +190,7 @@ class S16(Register):
         Register.__init__(self, register_id, name, description, 1, format, unit)
 
     def set_registers(self, registers):    
-        v = BinaryPayloadDecoder.fromRegisters(registers, byteorder=Endian.Big).decode_16bit_int()         
+        v = ModbusBaseClient.convert_from_registers(registers, ModbusBaseClient.DATATYPE.INT16)      
         # direct compare to 0x8000 doesn't work because 0x8000 is two's complement!!! 
         # v==0x8000 is c/c++ style! This will only work in python for unsigned ints
         self.value = None if v == S16_NAN else v * self.scalefactor
@@ -171,7 +202,7 @@ class S32(Register):
         Register.__init__(self, register_id, name, description, 2, format, unit)
 
     def set_registers(self, registers):
-        v =  BinaryPayloadDecoder.fromRegisters(registers, byteorder=Endian.Big).decode_32bit_int()
+        v = ModbusBaseClient.convert_from_registers(registers, ModbusBaseClient.DATATYPE.INT32)
         self.value = None if v == S32_NAN  else v * self.scalefactor
 
 
@@ -180,7 +211,7 @@ class U16(Register):
         Register.__init__(self, register_id, name, description, 1, format, unit)
 
     def set_registers(self, registers):
-        v = BinaryPayloadDecoder.fromRegisters(registers, byteorder=Endian.Big).decode_16bit_uint()
+        v = ModbusBaseClient.convert_from_registers(registers, ModbusBaseClient.DATATYPE.UINT16)
         self.value = None if v == 0xFFFF else v * self.scalefactor
 
 
@@ -189,7 +220,7 @@ class U32(Register):
         Register.__init__(self, register_id, name, description, 2, format, unit)
 
     def set_registers(self, registers):
-        v = BinaryPayloadDecoder.fromRegisters(registers, byteorder=Endian.Big).decode_32bit_uint()
+        v = ModbusBaseClient.convert_from_registers(registers, ModbusBaseClient.DATATYPE.UINT32)
         self.value = None if v == 0xFFFFFFFF or v == 0xFFFFFD else v * self.scalefactor
         
         if self.value and self.format == "TAGLIST":
@@ -209,7 +240,7 @@ class U64(Register):
         Register.__init__(self, register_id, name, description, 4, format, unit)
 
     def set_registers(self, registers):
-        v = BinaryPayloadDecoder.fromRegisters(registers, byteorder=Endian.Big).decode_64bit_uint()
+        v = ModbusBaseClient.convert_from_registers(registers, ModbusBaseClient.DATATYPE.UINT64)
         self.value = None if v == 0xFFFFFFFFFFFFFFFF else v  * self.scalefactor
 
 
@@ -223,9 +254,9 @@ class STR32(Register):
 
     def set_registers(self, registers):
         # size is in bytes! one modbus register is 2 bytes wide
-        s = BinaryPayloadDecoder.fromRegisters(registers, byteorder=Endian.Big).decode_string(self.length * 2)
-        # convert to string and remove trailing Null-Chars
-        s = s.rstrip(b'\00').decode('utf-8','ignore').strip()
+        # new pymodbus: converts full register to string and convert to string and remove trailing Null-Chars 
+        s = ModbusBaseClient.convert_from_registers(registers, ModbusBaseClient.DATATYPE.STRING)        
+        s = s.strip()
 
         self.value = None if s=="" else s
 

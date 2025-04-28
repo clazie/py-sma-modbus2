@@ -1,17 +1,21 @@
 # py-sma-modbus2
-Read out *all* values from SMA inverters in local network via Modbus TCP. You don't need the SMA Sunny Portal anymore.
+Read out *all* values (eg MPPT1 und MPPT2,...) from SMA inverters in local network via Modbus TCP. You don't need the SMA Sunny Portal anymore.
 
-Tested with SMA Tripower STP 20000TL-30 and Python 3.7 under Windows 10 and CentOS 7
+Tested with SMA Tripower STP 20000TL-30 and Python 3.10/3.11 under Windows 11 and Debian 12 "bookworm"
 
-This is a fork of **py-sma-modbus**:
+*new*: Updated to pymodbus V3.9.2
+
+This is a fork of **py-sma-modbus** and **Wy53/py-sma-modbus**:
 - fixed bugs with signed int registers and string registers
 - removed the "GUI" (problems under Windows)
+- more robust daemon with systemd under linux
 - a bit more pythonic
 - values in correct dimension with units
 - all types and TAGLIST are supported
 - nice formatting with automatic unit prefixes 
 - load registers from file
-- output values to openhab REST web service
+- output values to OpenHab REST web service (1.x)
+- output values to InfluxDB 1.x (output registers to JSON)
 
 
 ## Todo
@@ -26,15 +30,42 @@ This is a fork of **py-sma-modbus**:
 ```sh
 git clone git@github.com:stefanlsa/py-sma-modbus2.git
 cd py-sma-modbus2
+```
+4) Create a virtual envrionment activate it and install requirements: 
+```sh
+python3 -m venv run/
+source run/bin/activate
 pip install -r requirements.txt
 ```
+5) Optional: Run it as a daemon under linux, as root do (or sudo):
+ - copy sma.service to /etc/systemd/system
+ - edit the lines ExecStart and WorkingDirectory to make sure that the service will point in the correct directory
+ - edit the line USER in woch context the demon will run eg. the user from openhab installation
+ - Reload the service files to include the new service.
+ ```sh
+ $ systemctl daemon-reload
+ ```
+ - Start your service
+ ```sh
+ $ systemctl start sma.service
+ ```
+ - To enable your service on every reboot
+ ```sh
+ $ systemctl enable sma.service
+ ```
+ -To check the status of your service
+ ```sh
+ $ systemctl status sma.service
+ ```
+
+
 
 ## Usage
 
 ```sh
 usage: main.py [-h] [-d] [-i INTERVAL] [-l] [-log] [-a ADRESS] [-p PORT]
-               [-u UNIT] [-all] [-f FILE] [--ohitems] [--ohlogport OHLOGPORT]
-               [-o OHLOG]
+               [-u UNIT] [-all] [-f FILE] [--ohitems] [--logport OHLOGPORT]
+               [-o OHLOG] [-influxlog INFLUXLOG]
                [registers [registers ...]]
 
 Gather data of your sma inverter
@@ -58,17 +89,20 @@ optional arguments:
                         separated with line break
   --ohitems             Print the Openhab items for the registers, use the
                         register file for nice formatting
-  --ohlogport OHLOGPORT
-                        Port of the Openhab-Server where the results will be
+  --logport OHLOGPORT
+                        Port of the Openhab-Server or InfluxDB where the results will be
                         written
   -o OHLOG, --ohlog OHLOG
                         Log to Openhab; IP/Url of of the Openhab-Server where
+                        the results will be written
+  --influxlog INFLUXLOG
+                        Log to InfluxDB; IP/Url of of the InfluxDB-Server where
                         the results will be written
 ```
 
 ## Examples
 
-Query single register
+Query single register, where 192.168.0.48 is the IP of your SMA inverter
 ```sh
 $ python main.py -a"192.168.0.48" 30775
 
@@ -154,7 +188,7 @@ String SMA_Operation_OpStt "Betriebsstatus [%s]" <none> (SMA)
 
 ```
 
-Query registers defined in a file, and send it to openhab (or other REST web service, if you modify the *openhablogger*)
+Query registers defined in a file, and send it to InfluxDB (or other REST web service, if you modify the *openhablogger* or *influxlogger*)
 ```sh
-$ python main.py -a"192.168.0.48"  -f"registers.txt" -o"192.168.0.200"
+$ python3 main.py -a"192.168.0.48"  -f"registers_influx.txt" --influxlog "192.168.0.200" --logport 8086 -d
 ```
