@@ -1,4 +1,5 @@
 # py-sma-modbus2
+
 Read out *all* values (eg MPPT1 und MPPT2,...) from SMA inverters in local network via Modbus TCP. You don't need the SMA Sunny Portal anymore.
 
 Tested with SMA Tripower STP 20000TL-30 and Python 3.10/3.11 under Windows 11 and Debian 12 "bookworm"
@@ -6,6 +7,7 @@ Tested with SMA Tripower STP 20000TL-30 and Python 3.10/3.11 under Windows 11 an
 *new*: Updated to pymodbus V3.9.2
 
 This is a fork of **py-sma-modbus** and **Wy53/py-sma-modbus**:
+
 - fixed bugs with signed int registers and string registers
 - removed the "GUI" (problems under Windows)
 - more robust daemon with systemd under linux
@@ -17,8 +19,8 @@ This is a fork of **py-sma-modbus** and **Wy53/py-sma-modbus**:
 - output values to OpenHab REST web service (1.x)
 - output values to InfluxDB 1.x (output registers to JSON)
 
-
 ## Todo
+
 - Write Registers
 - Register description and TAGLIST in English or other language
 
@@ -27,38 +29,48 @@ This is a fork of **py-sma-modbus** and **Wy53/py-sma-modbus**:
 1) Enable with the SMA tool "Sunny Explorer" the *Modbus TCP* protocol on the inverter (UDP is not needed)
 2) Make sure that the inverter has a static IP Adress (or always gets the same IP via DHCP)
 3) Download the code or clone it:
+
 ```sh
 git clone git@github.com:stefanlsa/py-sma-modbus2.git
 cd py-sma-modbus2
 ```
-4) Create a virtual envrionment activate it and install requirements: 
+
+4) Create a virtual envrionment activate it and install requirements:
+
 ```sh
-python3 -m venv run/
-source run/bin/activate
+python3 -m venv env
+source env/bin/activate
 pip install -r requirements.txt
 ```
+
 5) Optional: Run it as a daemon under linux, as root do (or sudo):
- - copy sma.service to /etc/systemd/system
- - edit the lines ExecStart and WorkingDirectory to make sure that the service will point in the correct directory
- - edit the line USER in woch context the demon will run eg. the user from openhab installation
- - Reload the service files to include the new service.
+
+- copy sma.service to /etc/systemd/system
+- edit the lines ExecStart and WorkingDirectory to make sure that the service will point in the correct directory
+- edit the line USER in woch context the demon will run eg. the user from openhab installation
+- Reload the service files to include the new service.
+
  ```sh
- $ systemctl daemon-reload
- ```
- - Start your service
- ```sh
- $ systemctl start sma.service
- ```
- - To enable your service on every reboot
- ```sh
- $ systemctl enable sma.service
- ```
- -To check the status of your service
- ```sh
- $ systemctl status sma.service
+systemctl daemon-reload
  ```
 
+- Start your service
 
+ ```sh
+systemctl start sma.service
+ ```
+
+- To enable your service on every reboot
+
+ ```sh
+systemctl enable sma.service
+ ```
+
+- To check the status of your service
+
+ ```sh
+systemctl status sma.service
+ ```
 
 ## Usage
 
@@ -103,15 +115,17 @@ optional arguments:
 ## Examples
 
 Query single register, where 192.168.0.48 is the IP of your SMA inverter
+
 ```sh
-$ python main.py -a"192.168.0.48" 30775
+python main.py -a"192.168.0.48" 30775
 
 30775 GridMs.TotW (Leistung) 1.23 kW
 ```
 
 Query single register, ervery 60 seconds (daemon)
+
 ```sh
-$ python main.py -a"192.168.0.48" -d 30775 
+python main.py -a"192.168.0.48" -d 30775 
 
 30775 GridMs.TotW (Leistung) 1.23 kW
 30775 GridMs.TotW (Leistung) 2.34 kW
@@ -120,20 +134,21 @@ $ python main.py -a"192.168.0.48" -d 30775
 ```
 
 Query all registers
-```sh
-$ python main.py -a"192.168.0.48" -all
 
+```sh
+python main.py -a"192.168.0.48" -all
 ```
 
 Query registers defined in a file
-```sh
-$ python main.py -a"192.168.0.48"  -f"registers.txt" 
 
+```sh
+python main.py -a"192.168.0.48"  -f"registers.txt" 
 ```
 
 Generate openhab items for registers defined in a file
+
 ```sh
-$ python main.py -a"192.168.0.48"  -f"registers.txt" -ohitems
+python main.py -a"192.168.0.48"  -f"registers.txt" -ohitems
 
  //  AC-Seite
 Number SMA_Metering_TotWhOut "Gesamtertrag [%.0f Wh]" <none> (SMA)
@@ -189,6 +204,28 @@ String SMA_Operation_OpStt "Betriebsstatus [%s]" <none> (SMA)
 ```
 
 Query registers defined in a file, and send it to InfluxDB (or other REST web service, if you modify the *openhablogger* or *influxlogger*)
+
 ```sh
-$ python3 main.py -a"192.168.0.48"  -f"registers_influx.txt" --influxlog "192.168.0.200" --logport 8086 -d
+python3 main.py -a"192.168.0.48"  -f"registers_influx.txt" --influxlog "192.168.0.200" --logport 8086 -d
+```
+
+```sh
+python main.py -a"192.168.15.165" -p502 -u3 30001 30053 30775 30803 30795 34113 30771 30769 30771 30773 30957 30959 30961
+```
+
+Result:
+
+```txt
+30001 SMA.Modbus.Profile (Versionsnummer SMA Modbus-Profil) 1304 
+30053 Nameplate.Model (Gerätetyp) Unknown Value 19051
+30769 DcMs.Amp.MPPT1 (DC Strom Eingang MPPT1) 84.000 mA
+30771 DcMs.Vol.MPPT1 (DC Spannung Eingang  MPPT1) 200.50 V
+30773 DcMs.Watt.MPPT1 (DC Leistung Eingang  MPPT1) 17 W
+30775 GridMs.TotW (Leistung) 0 W
+30795 GridMs.TotA (Netzstrom) 1.200 A
+30803 GridMs.Hz (Netzfrequenz) 50.03 Hz
+30957 DcMs.Amp.MPPT2 (DC Strom Eingang MPPT2) 129.000 mA
+30959 DcMs.Vol.MPPT2 (DC Spannung Eingang MPPT2) 184.80 V
+30961 DcMs.Watt.MPPT2 (DC Leistung Eingang  MPPT2) 24 W
+34113 Coolsys.Cab.TmpVal (Innentemperatur) 38.1 °C
 ```
