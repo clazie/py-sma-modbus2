@@ -1,4 +1,5 @@
-import argparse,  sma
+import argparse
+import sma
 
 from modbus import Modbus
 from logger import TableLogger
@@ -27,12 +28,12 @@ parser.add_argument('-a', '--adress',
                     type=str,
                     help='modbus-TCP ip-adress')
 parser.add_argument('-p', '--port',
-                    type=int, 
-                    default= 502,
+                    type=int,
+                    default=502,
                     help='modbus-TCP ip-port, default: 502')
 parser.add_argument('-u', '--unit',
-                    type=int, 
-                    default= 3,
+                    type=int,
+                    default=3,
                     help='modbus unit, default: 3')
 '''
 parser.add_argument('-t', '--type',
@@ -40,11 +41,11 @@ parser.add_argument('-t', '--type',
                     required=True,
                     help='inverter type')
 '''
-parser.add_argument('-all','--all',
+parser.add_argument('-all', '--all',
                     action='store_true',
                     help='Read All Registers')
 
-parser.add_argument('-f','--file', 
+parser.add_argument('-f', '--file',
                     type=argparse.FileType('r'),
                     help='Read the registers from the file, the registers must separated with line break')
 
@@ -81,10 +82,10 @@ if args.ohlog:
 elif args.log:
     logger = TableLogger()
 
-wr = Modbus(ipAdress=args.adress, ipPort=args.port, modbusUnit=args.unit, 
-                runAsDaemon=args.daemon, pollingInterval=args.interval, logger= logger)
+wr = Modbus(ipAdress=args.adress, ipPort=args.port, modbusUnit=args.unit,
+            runAsDaemon=args.daemon, pollingInterval=args.interval, logger=logger)
 
-#import register definitions
+# import register definitions
 sma.add_tripower_register(wr)
 sma.set_tripower_TAGLIST()
 
@@ -108,25 +109,25 @@ elif args.all:
     for register in wr.available_registers.keys():
         wr.poll_register(register)
 elif args.file:
-    lines = [line for line in args.file.readlines() if line.strip()!='']
+    lines = [line for line in args.file.readlines() if line.strip() != '']
     for r in lines:
-        if r[0]=='#': 
+        if r[0] == '#':
             continue
         wr.poll_register(int(r))
 else:
     for register in args.registers:
         wr.poll_register(register)
-    
+
 if args.ohitems:
-    if lines:        
-        for l in lines:
-            if l[0]=='#':
-                print("\n",r"// ", l[1:].strip())
+    if lines:
+        for line in lines:
+            if line[0] == '#':
+                print("\n", r"// ", line[1:].strip())
             else:
-                print( wr.available_registers[int(l)].get_openhab_item())
-    else:    
+                print(wr.available_registers[int(line)].get_openhab_item())
+    else:
         for id in wr.registers:
-            print( wr.available_registers[id].get_openhab_item())
+            print(wr.available_registers[id].get_openhab_item())
     print("\n\n\n")
 
 wr.start()

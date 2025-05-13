@@ -6,13 +6,13 @@ from pymodbus.client import ModbusBaseClient
 from format_unit import formatWithPrefix
 
 
-def _JsonPoint(measurement = "series_name", fields={}, tags={}):
+def _JsonPoint(measurement="series_name", fields={}, tags={}):
     # create a json point for write to influxDB
     return [{
-                "measurement": measurement,
-                "fields": fields,
-                "tags": tags,
-                #"time": time
+            "measurement": measurement,
+            "fields": fields,
+            "tags": tags,
+            # "time": time
             }]
 
 
@@ -22,14 +22,14 @@ class Register:
         self.name = name
         self.description = description
         self.length = length
-        self.value = None        
+        self.value = None
         self.format = format
-        self.unit = unit 
+        self.unit = unit
         self.scalefactor, self.formatprecision = Register.getScale(format)
         self.noprefix = format in Register.NO_PREFIX_FORMATTING
         self._oh_name = None
         self._influx_tag = None
-        
+
     def __str__(self):
         return f"{self.id} {self.name} ({self.description}) {self.get_formattedValue()}"
 
@@ -47,51 +47,51 @@ class Register:
             return 'No Time' if self.value is None else strftime("%a, %d %b %Y %H:%M:%S", localtime(self.value))
         else:
             return 'No Value' if self.value is None else formatWithPrefix(self.value, self.formatprecision, self.unit)
-        
+
     def get_value(self):
-        return self.value 
+        return self.value
 
     def get_openhab_item(self):
         # Helper: Output Openhab item definitions ... ensure by yourself, that the name is unique!
-        
+
         # output some special formats as string
         if self.format in Register.OUT_OPENHAB_AS_STRING:
             return f'String {self.get_openhab_name()} "{self.description} [%s]" <none> (SMA)'
-        
+
         return f'Number {self.get_openhab_name()} "{self.description} [%.{self.formatprecision}f {self.unit}]" <none> (SMA)'
 
     def get_openhab_name(self):
         if not self._oh_name:
-           self._oh_name = f'SMA_{self.name.replace(".","_")}' 
+           self._oh_name = f'SMA_{self.name.replace(".", "_")}'
         return self._oh_name
 
-    def get_openhab_value(self):        
+    def get_openhab_value(self):
         if self.format in Register.OUT_OPENHAB_AS_STRING:
             return self.get_formattedValue()
-        
+
         if self.value is None and self.unit in Register.OUT_OPENHAB_NONE_AS_0:
             return 0
-        
+
         return self.value
 
-    def get_JSON(self, measurement, tags ={}):
-        # format Data to JSON, used to write Data to influxDB 
-        # append the Names and unit to TAGs   
+    def get_JSON(self, measurement, tags={}):
+        # format Data to JSON, used to write Data to influxDB
+        # append the Names and unit to TAGs
         # build the Tag-List by splitting the name by '.'
         if not self._influx_tag:
             parts = self.name.split('.')
             self._influx_tag = {
-                    'group':parts[0],
-                    'function':'.'.join(parts[1:]),
-                    'unit': self.unit
-                    }
+                'group': parts[0],
+                'function': '.'.join(parts[1:]),
+                'unit': self.unit
+            }
 
         if self.format in Register.OUT_INFLUX_AS_STRING:
-            return [] + _JsonPoint(measurement + "_status", {"value": self.get_formattedValue()},tags | self._influx_tag)
+            return [] + _JsonPoint(measurement + "_status", {"value": self.get_formattedValue()}, tags | self._influx_tag)
         elif self.value is None:
             return []
         else:
-            return [] + _JsonPoint(measurement, {"value": float(self.value)},tags | self._influx_tag) 
+            return [] + _JsonPoint(measurement, {"value": float(self.value)}, tags | self._influx_tag)
 
     """
     Produktübersicht SMA Solar Technology AG
@@ -148,21 +148,20 @@ class Register:
 
     NO_PREFIX_FORMATTING = {"UTF8", "TM", "REV", "RAW", "IP4", "HW", "FW"}
 
-    OUT_OPENHAB_AS_STRING = {"UTF8", "TM", "TAGLIST", "Dauer", "DT"} 
+    OUT_OPENHAB_AS_STRING = {"UTF8", "TM", "TAGLIST", "Dauer", "DT"}
 
     OUT_INFLUX_AS_STRING = {"UTF8", "TM", "TAGLIST", "DT"}
 
-    OUT_OPENHAB_NONE_AS_0 = {"W","A","VAr","VA"}
+    OUT_OPENHAB_NONE_AS_0 = {"W", "A", "VAr", "VA"}
 
     @staticmethod
     def getScale(format):
         if format is None:
-            return [1,0]
-        f = Register.FORMATS.get(format,[1,0])
+            return [1, 0]
+        f = Register.FORMATS.get(format, [1, 0])
         return f
 
-    SMA_TAGLIST ={} # must assigned on startup! see sma.py for example    
-    
+    SMA_TAGLIST = {}  # must assigned on startup! see sma.py for example
 
 
 def hex_to_signed(source):
@@ -183,17 +182,19 @@ def hex_to_signed(source):
     value = int(source, 16)
     return -(value & sign_bit_mask) | (value & other_bits_mask)
 
+
 S16_NAN = hex_to_signed("8000")
 
 class S16(Register):
     def __init__(self, register_id, name, description, format=None, unit=''):
         Register.__init__(self, register_id, name, description, 1, format, unit)
 
-    def set_registers(self, registers):    
-        v = ModbusBaseClient.convert_from_registers(registers, ModbusBaseClient.DATATYPE.INT16)      
-        # direct compare to 0x8000 doesn't work because 0x8000 is two's complement!!! 
+    def set_registers(self, registers):
+        v = ModbusBaseClient.convert_from_registers(registers, ModbusBaseClient.DATATYPE.INT16)
+        # direct compare to 0x8000 doesn't work because 0x8000 is two's complement!!!
         # v==0x8000 is c/c++ style! This will only work in python for unsigned ints
         self.value = None if v == S16_NAN else v * self.scalefactor
+
 
 S32_NAN = hex_to_signed("80000000")
 
@@ -203,7 +204,7 @@ class S32(Register):
 
     def set_registers(self, registers):
         v = ModbusBaseClient.convert_from_registers(registers, ModbusBaseClient.DATATYPE.INT32)
-        self.value = None if v == S32_NAN  else v * self.scalefactor
+        self.value = None if v == S32_NAN else v * self.scalefactor
 
 
 class U16(Register):
@@ -222,17 +223,16 @@ class U32(Register):
     def set_registers(self, registers):
         v = ModbusBaseClient.convert_from_registers(registers, ModbusBaseClient.DATATYPE.UINT32)
         self.value = None if v == 0xFFFFFFFF or v == 0xFFFFFD else v * self.scalefactor
-        
+
         if self.value and self.format == "TAGLIST":
             self.raw_value = self.value
             self.value = Register.SMA_TAGLIST.get(self.value, f"Unknown Value {self.value}")
 
     def get_formattedValue(self):
-        if self.value and self.format == "TAGLIST": 
+        if self.value and self.format == "TAGLIST":
             return self.value
         else:
             return super().get_formattedValue()
-           
 
 
 class U64(Register):
@@ -241,7 +241,7 @@ class U64(Register):
 
     def set_registers(self, registers):
         v = ModbusBaseClient.convert_from_registers(registers, ModbusBaseClient.DATATYPE.UINT64)
-        self.value = None if v == 0xFFFFFFFFFFFFFFFF else v  * self.scalefactor
+        self.value = None if v == 0xFFFFFFFFFFFFFFFF else v * self.scalefactor
 
 
 class STR32(Register):
@@ -254,13 +254,11 @@ class STR32(Register):
 
     def set_registers(self, registers):
         # size is in bytes! one modbus register is 2 bytes wide
-        # new pymodbus: converts full register to string and convert to string and remove trailing Null-Chars 
-        s = ModbusBaseClient.convert_from_registers(registers, ModbusBaseClient.DATATYPE.STRING)        
+        # new pymodbus: converts full register to string and convert to string and remove trailing Null-Chars
+        s = ModbusBaseClient.convert_from_registers(registers, ModbusBaseClient.DATATYPE.STRING)
         s = s.strip()
 
-        self.value = None if s=="" else s
+        self.value = None if s == "" else s
 
     def get_formattedValue(self):
         return self.value
-
-

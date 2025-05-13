@@ -1,0 +1,245 @@
+30001 SMA.Modbus.Profile (Versionsnummer SMA Modbus-Profil) 1304 
+30003 Nameplate.SusyId (SUSyID Modul) 440 
+30005 Nameplate.SerNum (Seriennummer) 1234567890
+30051 Nameplate.MainModel (Geräteklasse) Unknown Value 8009
+30053 Nameplate.Model (Gerätetyp) Unknown Value 19051
+30055 Nameplate.Vendor (Hersteller) Unknown Value 461
+30057 Nameplate.SerNum (Seriennummer) 1234567890
+30059 Nameplate.PkgRev (Softwarepaket) 50399492
+30193 DtTm.Tm (Systemzeit) Tue, 13 May 2025 19:34:01
+30197 Operation.Evt.EvtNoShrt (Aktuelle Ereignisnummer) No Value
+30199 Operation.RmgTms (Wartezeit bis Einspeisung) No Duration
+30201 Operation.Health (Zustand) Ok (Ok)
+30203 Operation.HealthStt.Ok (Nennleistung im Zustand Ok) 10 kW
+30205 Operation.HealthStt.Wrn (Nennleistung im Zustand Warnung) 0 W
+30207 Operation.HealthStt.Alm (Nennleistung im Zustand Fehler) 0 W
+30211 Operation.Evt.Prio (Empfohlene Aktion) keine (NonePrio)
+30213 Operation.Evt.Msg (Meldung) keine (NoneMsg)
+30215 Operation.Evt.Dsc (Fehlerbehebungsmaßnahme) keine (NoneDsc)
+30217 Operation.GriSwStt (Netzrelais/-schütz) Geschlossen (Cls)
+30219 Operation.DrtStt (Leistungsreduzierung) No Value
+30225 Isolation.LeakRis (Isolationswiderstand) 15 MOhm
+30231 Inverter.WLim (Maximale Gerätewirkleistung) 10 kW
+30233 Inverter.WMax (Eingestellte Wirkleistungsgrenze) 10 kW
+30247 Operation.Evt.EvtNo (Aktuelle Ereignisnummer für Hersteller) 0 
+30513 Metering.TotWhOut (Gesamtertrag) 0 Wh
+30517 Metering.DyWhOut (Tagesertrag) 0 Wh
+30521 Metering.TotOpTms (Betriebszeit) No Duration
+30525 Metering.TotFeedTms (Einspeisezeit) No Duration
+30529 Metering.TotWhOut (Gesamtertrag) 0 Wh
+30531 Metering.TotWhOut (Gesamtertrag) 0 kWh
+30533 Metering.TotWhOut (Gesamtertrag) 0 MWh
+30535 Metering.DyWhOut (Tagesertrag) 0 Wh
+30537 Metering.DyWhOut (Tagesertrag) 0 kWh
+30539 Metering.DyWhOut (Tagesertrag) 0 MWh
+30541 Metering.TotOpTms (Betriebszeit) No Duration
+30543 Metering.TotFeedTms (Einspeisezeit) No Duration
+30559 Operation.EvtCntUsr (Anzahl Ereignisse für Benutzer) 26 
+30561 Operation.EvtCntIstl (Anzahl Ereignisse für Installateur) 13 
+30563 Operation.EvtCntSvc (Anzahl Ereignisse für Service) 5
+30583 Metering.GridMs.TotWhOut (Zählerstand Netzeinspeise-Zähler) No Value
+30599 Operation.GriSwCnt (Anzahl Netzzuschaltungen) No Value
+30769 DcMs.Amp.MPPT1 (DC Strom Eingang MPPT1) 2.576 A
+30771 DcMs.Vol.MPPT1 (DC Spannung Eingang  MPPT1) 483.20 V
+30773 DcMs.Watt.MPPT1 (DC Leistung Eingang  MPPT1) 1 kW
+30775 GridMs.TotW (Leistung) 2 kW
+30777 GridMs.W.phsA (Leistung L1) 753 W
+30779 GridMs.W.phsB (Leistung L2) 753 W
+30781 GridMs.W.phsC (Leistung L3) 746 W
+30783 GridMs.PhV.phsA (Netzspannung Phase L1) 229.60 V
+30785 GridMs.PhV.phsB (Netzspannung Phase L2) 228.70 V
+30787 GridMs.PhV.phsC (Netzspannung Phase L3) 228.80 V
+30795 GridMs.TotA (Netzstrom) 9.600 A
+30803 GridMs.Hz (Netzfrequenz) 49.99 Hz
+30805 GridMs.TotVAr (Blindleistung) No Value
+30807 GridMs.VAr.phsA (Blindleistung L1) -1 VAr
+30809 GridMs.VAr.phsB (Blindleistung L2) -1 VAr
+30811 GridMs.VAr.phsC (Blindleistung L3) -1 VAr
+30813 GridMs.TotVA (Scheinleistung) 2 kVA
+30815 GridMs.VA.phsA (Scheinleistung L1) 750 VA
+30817 GridMs.VA.phsB (Scheinleistung L2) 750 VA
+30819 GridMs.VA.phsC (Scheinleistung L3) 750 VA
+30825 Inverter.VArModCfg.VArMod (Betriebsart der statischen Spannungshaltung, Konfiguration der statischen Spannungshaltung) Aus (Off)
+30829 Inverter.VArModCfg.VArCnstCfg.VArNom (Blindleistungssollwert in %) 0.0 %
+30831 Inverter.VArModCfg.PFCnstCfg.PF (Sollwert des cos Phi, Konfiguration des cos Phi, direkte Vorgabe) No Value
+30833 Inverter.VArModCfg.PFCnstCfg.PFExt (Erregungsart des cos Phi, Konfiguration des cos Phi, direkte Vorgabe) No Value
+30835 Inverter.WModCfg.WMod (Betriebsart des Einspeisemanagements) Wirkleistungsbegrenzung P durch Anlagensteuerung (WCtlCom)
+30837 Inverter.WModCfg.WCnstCfg.W (Wirkleistungsbegrenzung in W) 10 kW
+30839 Inverter.WModCfg.WCnstCfg.WNom (Wirkleistungsbegrenzung in %) 100 %
+30881 Operation.PvGriConn (Netzanbindung der PV-Anlage ) Öffentliches Stromnetz (PubGri)
+30919 Inverter.VArModCfg.VArModDmd (Betriebsart der statischen Spannungshaltung bei Q on Demand, Konfiguration der statischen Spannungshaltung) No Value
+30925 Spdwr.ComSocA.ConnSpd (Verbindungsgeschwindigkeit von SMACOM A) 100 Mbit/s (ConnSpd100)
+30927 Spdwr.ComSocA.DpxMode (Duplexmodus von SMACOM A) Vollduplex (FulDpx)
+30929 Spdwr.ComSocA.Stt (Speedwire-Verbindungsstatus von SMACOM A) Ok (Ok)
+30931 Spdwr.ComSocB.ConnSpd (Verbindungsgeschwindigkeit von SMACOM B) ------- (None)
+30933 Spdwr.ComSocB.DpxMode (Duplexmodus von SMACOM B) ------- (None)
+30935 Spdwr.ComSocB.Stt (Speedwire-Verbindungsstatus von SMACOM B) Keine Verbindung (NotConn)
+30949 GridMs.TotPFPrc (Verschiebungsfaktor) 0.000 
+30953 Coolsys.Cab.TmpVal (Innentemperatur) 43.5 °C
+30957 DcMs.Amp.MPPT2 (DC Strom Eingang MPPT2) 3.861 A
+30959 DcMs.Vol.MPPT2 (DC Spannung Eingang MPPT2) 273.20 V
+30961 DcMs.Watt.MPPT2 (DC Leistung Eingang  MPPT2) 1 kW
+30975 Inverter.DclVol (Zwischenkreisspannung) No Value
+30977 GridMs.A.phsA (Netzstrom Phase L1) 3.200 A
+30979 GridMs.A.phsB (Netzstrom Phase L2) 3.200 A
+30981 GridMs.A.phsC (Netzstrom Phase L3) 3.200 A
+31017 Spdwr.ActlIp (-) 192.168.15.165
+31025 Spdwr.ActlSnetMsk (-) 255.255.255.0
+31033 Spdwr.ActlGwIp (-) 192.168.15.123
+31041 Spdwr.ActlDnsSrvIp (-) 192.168.15.123
+31085 Operation.HealthStt.Ok (Nennleistung im Zustand Ok) 10 kW
+31159 Operation.Dmd.VArCtl (Aktuelle Vorgabe Blindleistung Q) No Value
+31247 Isolation.FltA (Fehlerstrom) 32.000 mA
+31793 DcMs.Amp__1 (DC Strom Eingang ?1) 0.000 A
+31795 DcMs.Am__2 (DC Strom Eingang ?2) 0.000 A
+34113 Coolsys.Cab.TmpVal (Innentemperatur) 43.5 °C
+35377 Operation.EvtCntUsr (Anzahl Ereignisse für Benutzer) 26 
+35381 Operation.EvtCntIstl (Anzahl Ereignisse für Installateur) 13 
+35385 Operation.EvtCntSvc (Anzahl Ereignisse für Service) 5
+40009 Operation.OpMod (Betriebszustand) Start (Str)
+40013 CntrySettings.Lang (Sprache der Oberfläche) English (LangEN)
+40029 Operation.OpStt (Betriebsstatus) Unknown Value 569
+40063 Nameplate.CmpMain.SwRev (Firmware-Version des Hauptprozessors) 16785157 
+40065 Nameplate.CmpSigProc.SwRev (Firmware-Version der Logikkomponente) No Value
+40067 Nameplate.SerNum (Seriennummer) 3015636785
+40095 GridGuard.Cntry.VolCtl.Max (Spannungsüberwachung obere Maximalschwelle) No Value
+40109 GridGuard.Cntry (Eingestellte Ländernorm) No Value
+40133 GridGuard.Cntry.VRtg (Netz-Nennspannung) No Value
+40135 GridGuard.Cntry.HzRtg (Nennfrequenz) 50.00 Hz
+40157 Spdwr.AutoCfgIsOn (Automatische Speedwire-Konfiguration eingeschaltet) Nein (No)
+40159 Spdwr.Ip (-) 192.168.15.165
+40167 Spdwr.SnetMsk (-) 255.255.255.0
+40175 Spdwr.GwIp (-) 192.168.15.123
+40185 Inverter.VALim (Maximale Gerätescheinleistung) 10 kVA
+40195 Inverter.VAMax (Eingestellte Scheinleistungsgrenze) 10 kVA
+40200 Inverter.VArModCfg.VArMod (Betriebsart der statischen Spannungshaltung, Konfiguration der statischen Spannungshaltung) Aus (Off)
+40204 Inverter.VArModCfg.VArCnstCfg.VArNom (Blindleistungssollwert in %) 0.0 %
+40206 Inverter.VArModCfg.PFCnstCfg.PF (Sollwert des cos Phi, Konfiguration des cos Phi, direkte Vorgabe) No Value
+40208 Inverter.VArModCfg.PFCnstCfg.PFExt (Erregungsart des cos Phi, Konfiguration des cos Phi, direkte Vorgabe) No Value
+40210 Inverter.WModCfg.WMod (Betriebsart des Einspeisemanagements) Wirkleistungsbegrenzung P durch Anlagensteuerung (WCtlCom)
+40212 Inverter.WModCfg.WCnstCfg.W (Wirkleistungsbegrenzung in W) 10 kW
+40214 Inverter.WModCfg.WCnstCfg.WNom (Wirkleistungsbegrenzung in %) 100 %
+40216 Inverter.WCtlHzModCfg.WCtlHzMod (Betriebsart der Wirkleistungsreduktion bei Überfrequenz P(f)) Aus (Off)
+40218 Inverter.WCtlHzModCfg.WCtlHzCfg.HzStr (Abstand der Startfrequenz zur Netzfrequenz, Konfiguration des linearen Gradienten der Momentanleistung) 200.00 mHz
+40220 Inverter.WCtlHzModCfg.WCtlHzCfg.HzStop (Abstand der Rücksetzfrequenz zur Netzfrequenz, Konfiguration des linearen Gradienten der Momentanleistung) 50.00 mHz
+40222 Inverter.VArModCfg.PFCtlWCfg.PFStr (cos Phi des Startpunktes, Konfiguration der cos Phi(P)-Kennlinie) 1.00
+40224 Inverter.VArModCfg.PFCtlWCfg.PFExtStr (Erregungsart des Startpunktes, Konfiguration der cos Phi(P)-Kennlinie) Übererregt (OvExt)
+40226 Inverter.VArModCfg.PFCtlWCfg.PFStop (cos Phi des Endpunktes, Konfiguration der cos Phi(P)-Kennlinie) 0.95
+40228 Inverter.VArModCfg.PFCtlWCfg.PFExtStop (Erregungsart des Endpunktes, Konfiguration der cos Phi(P)-Kennlinie) Untererregt (UnExt)
+40230 Inverter.VArModCfg.PFCtlWCfg.WNomStr (Wirkleistung des Startpunktes, Konfiguration der cos Phi(P)-Kennlinie) 50 %
+40232 Inverter.VArModCfg.PFCtlWCfg.WNomStop (Wirkleistung des Endpunktes, Konfiguration der cos Phi(P)-Kennlinie) 100 %
+40234 Inverter.WGra (Wirkleistungsgradient) No Value
+40238 Inverter.WCtlHzModCfg.WCtlHzCfg.WGra (Wirkleistungsgradient, Konfiguration des linearen Gradienten der Momentanleistung) 40 %
+40240 Inverter.WCtlHzModCfg.WCtlHzCfg.HystEna (Aktivierung der Schleppzeigerfunktion, Konfiguration des linearen Gradienten der Momentanleistung) Ein (On)
+40242 Inverter.WCtlHzModCfg.WCtlHzCfg.HzStopWGra (Wirkleistungsgradient nach Rücksetzfrequenz, Konfiguration des linearen Gradienten der Momentanleistung) 10 %
+40244 Inverter.DGSModCfg.DGSFlCfg.ArGraMod (Blindstromstatik, Konfiguration der vollständigen dynamischen Netzstützung) No Value
+40250 Inverter.DGSModCfg.DGSMod (Betriebsart der dynamischen Netzstützung, Konfiguration der dynamischen Netzstützung) No Value
+40252 Inverter.DGSModCfg.DGSFlCfg.DbVolNomMin (Untergrenze Spannungstotband, Konfiguration der vollständigen dynamischen Netzstützung) No Value
+40254 Inverter.DGSModCfg.DGSFlCfg.DbVolNomMax (Obergrenze Spannungstotband, Konfiguration der vollständigen dynamischen Netzstützung) No Value
+40256 Inverter.DGSModCfg.PwrCirInopVolNom (PWM-Sperrspannung, Konfiguration der dynamischen Netzstützung) No Value
+40258 Inverter.DGSModCfg.PwrCirInopTms (PWM-Sperrverzögerung, Konfiguration der dynamischen Netzstützung) No Value
+40260 Inverter.WCtlVolModCfg.CrvNum (Kennliniennummer, Konfiguration der Wirkleistungs-/Spannungskennlinie P(U)) No Value
+40428 GridGuard.Cntry.FrqCtl.hhLim (Frequenzüberwachung mittlere Maximalschwelle) 51.50 Hz
+40430 GridGuard.Cntry.FrqCtl.hhLimTmms (Frequenzüberwachung mittlere Maximalschwelle Auslösezeit) 100 ms
+40432 GridGuard.Cntry.FrqCtl.hLim (Frequenzüberwachung untere Maximalschwelle) 51.50 Hz
+40434 GridGuard.Cntry.FrqCtl.hLimTmms (Frequenzüberwachung untere Maximalschwelle Auslösezeit) 100 ms
+40436 GridGuard.Cntry.FrqCtl.lLim (Frequenzüberwachung obere Minimalschwelle) 47.50 Hz
+40438 GridGuard.Cntry.FrqCtl.lLimTmms (Frequenzüberwachung obere Minimalschwelle Auslösezeit) 100 ms
+40440 GridGuard.Cntry.FrqCtl.llLim (Frequenzüberwachung mittlere Minimalschwelle) 47.50 Hz
+40442 GridGuard.Cntry.FrqCtl.llLimTmms (Frequenzüberwachung mittlere Minimalschwelle Auslösezeit) 100 ms
+40446 GridGuard.Cntry.VolCtl.MaxTmms (Spannungsüberwachung obere Maximalschwelle Auslösezeit) No Value
+40448 GridGuard.Cntry.VolCtl.hhLim (Spannungsüberwachung mittlere Maximalschwelle) No Value
+40450 GridGuard.Cntry.VolCtl.hhLimTmms (Spannungsüberwachung mittlere Maximalschwelle Auslösezeit) 100 ms
+40452 GridGuard.Cntry.VolCtl.hLim (Spannungsüberwachung untere Maximalschwelle) No Value
+40456 GridGuard.Cntry.VolCtl.hLimTmms (Spannungsüberwachung untere Maximalschwelle Auslösezeit) 5000 ms
+40458 GridGuard.Cntry.VolCtl.lLim (Spannungsüberwachung obere Minimalschwelle) No Value
+40462 GridGuard.Cntry.VolCtl.lLimTmms (Spannungsüberwachung obere Minimalschwelle Auslösezeit) 3000 ms
+40464 GridGuard.Cntry.VolCtl.llLim (Spannungsüberwachung mittlere Minimalschwelle) No Value
+40466 GridGuard.Cntry.VolCtl.llLimTmms (Spannungsüberwachung mittlere Minimalschwelle Auslösezeit) 300 ms
+40472 Inverter.PlntCtl.VRef (Referenzspannung, Anlagensteuerung) 230 V
+40474 Inverter.PlntCtl.VRefOfs (Referenzkorrekturspannung, Anlagensteuerung) 0 V
+40482 Inverter.VArGra (Blindleistungsgradient) No Value
+40484 Inverter.WGraEna (Aktivierung des Wirkleistungsgradienten) No Value
+40490 Inverter.VArModCfg.VArCtlVolCfg.VArGraNom (Blindleistungsgradient, Konfiguration der Blindleistungs-/Spannungskennlinie Q(U)) 0.0 %
+40497 Nameplate.MacId (-) 00:15:BB:08:3E:14
+40513 Spdwr.DnsSrvIp (-) 192.168.15.123
+40575 MltFncSw.OpMode (Betriebsart des Multifunktionsrelais) Aus (Off)
+40789 Nameplate.ComRev (Kommunikationsversion) 16843010 
+40809 Nameplate.CmpSigProc.Rev (Umbaustand der Logikkomponente) No Value
+40915 Inverter.WMax (Eingestellte Wirkleistungsgrenze) 10 kW
+40997 Inverter.DGSModCfg.HystVolNom (Hysteresespannung, Konfiguration der dynamischen Netzstützung) No Value
+41001 Inverter.VArLimQ1 (Maximal erreichbare Blindleistung Quadrant 1) 6 kVAr
+41007 Inverter.VArLimQ4 (Maximal erreichbare Blindleistung Quadrant 4) -6 kVAr
+41009 Inverter.PFLimQ1 (Minimal erreichbarer cos(Phi) Quadrant 1) -0.800 
+41015 Inverter.PFLimQ4 (Minimal erreichbarer cos(Phi) Quadrant 4) 0.800 
+41017 Inverter.UtilCrvCfg.Crv.CrvTms (Einstellzeit des Kennlinienarbeitspunktes, Konf. der Netzintegrationskennlinie 1) No Value
+41019 Inverter.UtilCrvCfg.Crv.RmpDec (Absenkungsrampe, Konfiguration der Netzintegrationskennlinie 1) No Value
+41021 Inverter.UtilCrvCfg.Crv.RmpInc (Steigerungsrampe, Konfiguration der Netzintegrationskennlinie 1) No Value
+41023 Inverter.UtilCrvCfg.Crv.NumPt (Anzahl zu verwendender Punkte, Konfiguration der Netzintegrationskennlinie 1) No Value
+41025 Inverter.UtilCrvCfg.Crv.XRef (X-Achsen-Referenz, Konf. der Netzintegrationskennlinie 1) No Value
+41027 Inverter.UtilCrvCfg.Crv.YRef (Y-Achsen-Referenz, Konf. der Netzintegrationskennlinie 1) No Value
+41029 Inverter.UtilCrvCfg.Crv.XVal1 (X-Wert 1, Konfiguration der Netzintegrationskennlinie 1) No Value
+41031 Inverter.UtilCrvCfg.Crv.YVal1 (Y-Wert 1, Konfiguration der Netzintegrationskennlinie 1) No Value
+41033 Inverter.UtilCrvCfg.Crv.XVal2 (X-Wert 2, Konfiguration der Netzintegrationskennlinie 1) No Value
+41035 Inverter.UtilCrvCfg.Crv.YVal2 (Y-Wert 2, Konfiguration der Netzintegrationskennlinie 1) No Value
+41037 Inverter.UtilCrvCfg.Crv.XVal3 (X-Wert 3, Konfiguration der Netzintegrationskennlinie 1) No Value
+41039 Inverter.UtilCrvCfg.Crv.YVal3 (Y-Wert 3, Konfiguration der Netzintegrationskennlinie 1) No Value
+41041 Inverter.UtilCrvCfg.Crv.XVal4 (X-Wert 4, Konfiguration der Netzintegrationskennlinie 1) No Value
+41043 Inverter.UtilCrvCfg.Crv.YVal4 (Y-Wert 4, Konfiguration der Netzintegrationskennlinie 1) No Value
+41045 Inverter.UtilCrvCfg.Crv.XVal5 (X-Wert 5, Konfiguration der Netzintegrationskennlinie 1) No Value
+41047 Inverter.UtilCrvCfg.Crv.YVal5 (Y-Wert 5, Konfiguration der Netzintegrationskennlinie 1) No Value
+41049 Inverter.UtilCrvCfg.Crv.XVal6 (X-Wert 6, Konfiguration der Netzintegrationskennlinie 1) No Value
+41051 Inverter.UtilCrvCfg.Crv.YVal6 (Y-Wert 6, Konfiguration der Netzintegrationskennlinie 1) No Value
+41053 Inverter.UtilCrvCfg.Crv.XVal7 (X-Wert 7, Konfiguration der Netzintegrationskennlinie 1) No Value
+41055 Inverter.UtilCrvCfg.Crv.YVal7 (Y-Wert 7, Konfiguration der Netzintegrationskennlinie 1) No Value
+41057 Inverter.UtilCrvCfg.Crv.XVal8 (X-Wert 8, Konfiguration der Netzintegrationskennlinie 1) No Value
+41059 Inverter.UtilCrvCfg.Crv.YVal8 (Y-Wert 8, Konfiguration der Netzintegrationskennlinie 1) No Value
+41065 Inverter.UtilCrvCfg.Crv2.CrvTms (Einstellzeit des Kennlinienarbeitspunktes, Konfiguration der Netzintegrationskennlinie 2) No Value
+41067 Inverter.UtilCrvCfg.Crv2.RmpDec (Absenkungsrampe, Konfiguration der Netzintegrationskennlinie 2) No Value
+41069 Inverter.UtilCrvCfg.Crv2.RmpInc (Steigerungsrampe, Konfiguration der Netzintegrationskennlinie 2) No Value
+41071 Inverter.UtilCrvCfg.Crv2.NumPt (Anzahl zu verwendender Punkte, Konfiguration der Netzintegrationskennlinie 2) No Value
+41073 Inverter.UtilCrvCfg.Crv2.XRef (Eingangseinheit, Konfiguration der Netzintegrationskennlinie 2) No Value
+41075 Inverter.UtilCrvCfg.Crv2.YRef (Ausgangsreferenz, Konfiguration der Netzintegrationskennlinie 2) No Value
+41077 Inverter.UtilCrvCfg.Crv2.XVal1 (X-Wert 1, Konfiguration der Netzintegrationskennlinie 2) No Value
+41079 Inverter.UtilCrvCfg.Crv2.YVal1 (Y-Wert 1, Konfiguration der Netzintegrationskennlinie 2) No Value
+41081 Inverter.UtilCrvCfg.Crv2.XVal2 (X-Wert 2, Konfiguration der Netzintegrationskennlinie 2) No Value
+41083 Inverter.UtilCrvCfg.Crv2.YVal2 (Y-Wert 2, Konfiguration der Netzintegrationskennlinie 2) No Value
+41085 Inverter.UtilCrvCfg.Crv2.XVal3 (X-Wert 3, Konfiguration der Netzintegrationskennlinie 2) No Value
+41087 Inverter.UtilCrvCfg.Crv2.YVal3 (Y-Wert 3, Konfiguration der Netzintegrationskennlinie 2) No Value
+41089 Inverter.UtilCrvCfg.Crv2.XVal4 (X-Wert 4, Konfiguration der Netzintegrationskennlinie 2) No Value
+41091 Inverter.UtilCrvCfg.Crv2.YVal4 (Y-Wert 4, Konfiguration der Netzintegrationskennlinie 2) No Value
+41093 Inverter.UtilCrvCfg.Crv2.XVal5 (X-Wert 5, Konfiguration der Netzintegrationskennlinie 2) No Value
+41095 Inverter.UtilCrvCfg.Crv2.YVal5 (Y-Wert 5, Konfiguration der Netzintegrationskennlinie 2) No Value
+41097 Inverter.UtilCrvCfg.Crv2.XVal6 (X-Wert 6, Konfiguration der Netzintegrationskennlinie 2) No Value
+41099 Inverter.UtilCrvCfg.Crv2.YVal6 (Y-Wert 6, Konfiguration der Netzintegrationskennlinie 2) No Value
+41101 Inverter.UtilCrvCfg.Crv2.XVal7 (X-Wert 7, Konfiguration der Netzintegrationskennlinie 2) No Value
+41103 Inverter.UtilCrvCfg.Crv2.YVal7 (Y-Wert 7, Konfiguration der Netzintegrationskennlinie 2) No Value
+41105 Inverter.UtilCrvCfg.Crv2.XVal8 (X-Wert 8, Konfiguration der Netzintegrationskennlinie 2) No Value
+41107 Inverter.UtilCrvCfg.Crv2.YVal8 (Y-Wert 8, Konfiguration der Netzintegrationskennlinie 2) No Value
+41111 GridGuard.Cntry.VolCtl.MinEff (Spannungsüberwachung untere Minimalschwelle als Effektivwert) No Value
+41113 GridGuard.Cntry.VolCtl.MinEffTmms (Spannungsüberwachung untere Minimalschwelle als Effektivwert Auslösezeit) No Value
+41115 GridGuard.Cntry.VolCtl.MaxEff (Spannungsüberwachung obere Maximalschwelle als Effektivwert) No Value
+41117 GridGuard.Cntry.VolCtl.MaxEffTmms (Spannungsüberwachung obere Maximalschwelle als Effektivwert Auslösezeit) No Value
+41121 GridGuard.CntrySet (Setze Ländernorm) No Value
+41123 GridGuard.Cntry.VolCtl.ReconMin (Min. Spannung zur Wiederzuschaltung) No Value
+41125 GridGuard.Cntry.VolCtl.ReconMax (Max. Spannung zur Wiederzuschaltung) No Value
+41127 GridGuard.Cntry.FrqCtl.ReconMin (Untere Frequenz für Wiederzuschaltung) 47.52 Hz
+41129 GridGuard.Cntry.FrqCtl.ReconMax (Obere Frequenz für Wiederzuschaltung) 50.10 Hz
+41131 DcCfg.StrVol (minimale Spannung Eingang ) No Value
+41133 DcCfg.StrVol (minimale Spannung Eingang ) No Value
+41155 DcCfg.StrTms (Startverzögerung Eingang ) No Value
+41157 DcCfg.StrTms (Startverzögerung Eingang ) No Value
+41169 GridGuard.Cntry.LeakRisMin (Minimaler Isolationswiderstand) 200 kOhm
+41171 Metering.TotkWhOutSet (Setze Gesamtertrag) No Value
+41173 Metering.TotOpTmhSet (Setze Gesamte Betriebszeit am Netzanschlusspunkt) No Duration
+41193 Inverter.CtlComCfg.WCtlCom.CtlComMssMod (Betriebsart für ausbleibende Wirkleistungsbegrenzung) Werte beibehalten (UsStp)
+41195 Inverter.CtlComCfg.WCtlCom.TmsOut (Timeout für ausbleibende Wirkleistungsbegrenzung) 0:10:00
+41197 Inverter.CtlComCfg.WCtlCom.FlbWNom (Fallback Wirkleistungsbegrenzung P in % von WMax für ausbleibende Wirkleistungsbegrenzung) 100.00 %
+41219 Inverter.CtlComCfg.VArCtlCom.CtlComMssMod (Betriebsart für ausbleibende Blindleistungsregelung) Werte beibehalten (UsStp)
+41221 Inverter.CtlComCfg.VArCtlCom.TmsOut (Timeout für ausbleibende Blindleistungsregelung) 0:10:00
+41223 Inverter.CtlComCfg.VArCtlCom.FlbVArNom (Fallback Blindleistung Q in % von WMax für ausbleibende Blindleistungsregelung) 0.00 %
+41225 Inverter.CtlComCfg.PFCtlCom.CtlComMssMod (Betriebsart für ausbleibende cos Phi-Vorgabe) Werte beibehalten (UsStp)
+41227 Inverter.CtlComCfg.PFCtlCom.TmsOut (Timeout für ausbleibende cos Phi-Vorgabe) 0:10:00
+41229 Inverter.CtlComCfg.PFCtlCom.FlbPF (Fallback cos Phi für ausbleibende cos Phi-Vorgabe) 1.0000
+42109 Modbus.UnitID (Unit ID des Wechselrichters) 124046622525030403 
+43090 SMA.GridGuard.Code (SMA Grid Guard-Code) 1
